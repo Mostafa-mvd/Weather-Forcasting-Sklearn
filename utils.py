@@ -1,10 +1,9 @@
 import csv
-from sklearn import metrics
 
+from sklearn import metrics
 from sklearn.linear_model import LinearRegression
-from sklearn.metrics import r2_score
-from sklearn.neural_network import MLPClassifier, MLPRegressor
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.neural_network import MLPClassifier, MLPRegressor
 import pandas as pd
 
 import settings
@@ -54,15 +53,11 @@ def get_decision_tree_obj():
 
 
 def get_mlp_classifier_obj():
-    return MLPClassifier(hidden_layer_sizes=50, activation='identity', solver='adam',
-                         max_iter=500, learning_rate='adaptive', learning_rate_init=0.001,
-                         random_state=42)
+    return MLPClassifier(hidden_layer_sizes=(100, 100, 100), max_iter=2000)
 
 
 def get_mlp_regressor_obj():
-    return MLPRegressor(hidden_layer_sizes=6, activation='identity', solver='adam',
-                        max_iter=100, learning_rate='adaptive', learning_rate_init=0.001,
-                        random_state=42)
+    return MLPRegressor(hidden_layer_sizes=(100, 100, 100), max_iter=2000)
 
 
 def fit(x_train, y_train, model_obj):
@@ -74,11 +69,7 @@ def calculating_classification_accuracy(y_test, y_pred):
 
 
 def calculating_regr_score(y_test, y_pred):
-    return "{:.3f}%".format(metrics.r2_score(y_test, y_pred)*100)
-
-
-def calculating_mlp_score(x_test, y_test, mlp_model):
-    return "{:.3f}%".format(mlp_model.score(x_test, y_test)*100)
+    return "{:.2f}".format(metrics.r2_score(y_test, y_pred))
 
 
 def accuracy_line(accuracy):

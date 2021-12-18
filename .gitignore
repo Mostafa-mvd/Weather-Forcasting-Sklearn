@@ -154,4 +154,6 @@ cython_debug/
 # other
 __pycache__/*
 .vscode/
-predicted_weather_parameters.csv
+predicted_parameters.csv
+script.py
+helper_script.py
