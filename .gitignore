@@ -156,4 +156,3 @@ __pycache__/*
 .vscode/
 predicted_parameters.csv
 script.py
-helper_script.py
