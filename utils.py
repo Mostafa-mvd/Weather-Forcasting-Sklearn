@@ -14,7 +14,7 @@ def get_features():
 
 
 def get_target():
-    target = set(settings.all_column_names) - set(settings.feature_columns)
+    target = set(settings.required_columns) - set(settings.feature_columns)
 
     if len(target) == 1:
         return target.pop()
@@ -42,6 +42,16 @@ def get_dataframe(file_path, columns):
     return pd.read_csv(
         filepath_or_buffer=file_path, header=None,
         names=columns, encoding='latin-1')
+
+
+def replace_nan_value_with_mean(df, head_line):
+    for head_name in head_line:
+        if df[head_name].isnull().values.any():
+            features_df_float = pd.to_numeric(
+                df[head_name][1:], downcast="float")
+            mean_value = round(features_df_float.mean(), 2)
+            df[head_name] = df[head_name].fillna(str(mean_value))
+    return df
 
 
 def get_linear_regression_obj():
@@ -73,7 +83,7 @@ def calculating_regr_score(y_test, y_pred):
 
 
 def accuracy_line(accuracy):
-    accuracy_row = ['-' for _ in range(len(settings.all_column_names))]
+    accuracy_row = ['-' for _ in range(len(settings.required_columns))]
     accuracy_row.append(accuracy)
 
     return accuracy_row
@@ -83,7 +93,7 @@ def csv_writer(data, path, accuracy=''):
     with open(file=path, mode="w", encoding="latin-1") as csv_file:
         writer = csv.writer(csv_file, delimiter=',')
 
-        head_row = [*settings.all_column_names] + ["Accuracy"]
+        head_row = [*settings.required_columns] + ["Accuracy"]
 
         writer.writerow(head_row)
         writer.writerow(accuracy_line(accuracy))
@@ -91,7 +101,7 @@ def csv_writer(data, path, accuracy=''):
         for dict_data in data:
             line = list()
             
-            for col_key in settings.all_column_names:
+            for col_key in settings.required_columns:
                 line.append(dict_data[col_key])
 
             writer.writerow(line)
